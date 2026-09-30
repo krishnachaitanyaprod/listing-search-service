@@ -2,5 +2,6 @@ using ListingSearch.Core.Listings;
 
 namespace ListingSearch.Core.Search;
 
-// BudgetFit is null when no targetBudget was given, because the budget factor doesn't apply.
-public sealed record ScoredListing(Listing Listing, double Score, double? BudgetFit, double Recency);
+// Factors holds each score factor's value by name ("budgetFit", "recency").
+// A value is null when that factor doesn't apply, e.g. budgetFit when no targetBudget was given.
+public sealed record ScoredListing(Listing Listing, double Score, IReadOnlyDictionary<string, double?> Factors);

@@ -7,6 +7,7 @@ public sealed class SearchCriteria(SearchQuery query)
     public decimal? MinPrice { get; } = query.MinPrice;
     public decimal? MaxPrice { get; } = query.MaxPrice;
     public int? MinBedrooms { get; } = query.MinBedrooms;
+    public decimal? TargetBudget { get; } = query.TargetBudget;
 
     // Empty means no city filter.
     public string NormalizedCity { get; } = TextNormalizer.Normalize(query.City);

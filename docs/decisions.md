@@ -8,9 +8,10 @@ Score = `100 × Σ(weight × value) / Σ(weight)`, taken over the factors that a
 
 - Budget fit applies only when `targetBudget` is given.
 - Recency always applies.
+- If the weights of the factors that apply add up to 0, every score is 0 and the tie-break sets the order. This happens, for example, with RecencyWeight 0 and no targetBudget.
 - Defaults: BudgetWeight 0.7, RecencyWeight 0.3.
 
-**Why:** the budget is what the user typed, so it leads, and recency separates listings that fit the budget about equally well. Dividing by the sum of the weights means they don't have to add up to exactly 1, which is a fragile check on floating-point numbers. It also means a factor added later doesn't force re-balancing the others.
+**Why:** the budget is what the user typed, so it leads, and recency separates listings that fit the budget about equally well. Dividing by the sum of the weights means they don't have to add up to exactly 1, which is a fragile check on floating-point numbers. It also means a factor added later doesn't force re-balancing the others. The zero-weights rule means the formula never divides by zero, which the settings rule alone (at least one weight above 0) doesn't guarantee.
 
 ## Budget fit
 
@@ -28,7 +29,7 @@ Defaults: BudgetTolerance 0.25, OverBudgetPenalty 2. A listing 25% under budget,
 
 `recency = 0.5 ^ (ageDays / RecencyHalfLifeDays)`. Default half-life: 30 days.
 
-- "Today" is the current UTC date from `TimeProvider`. Tests pin it.
+- "Today" is the current UTC date from `TimeProvider`. It's read once per search, so every listing in a search is scored against the same date. Tests pin it.
 - `ageDays` is the number of whole days from `listedDate` to today.
 - A listing dated in the future counts as 0 days old.
 
