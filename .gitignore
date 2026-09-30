@@ -1,0 +1,15 @@
+# .NET build output
+bin/
+obj/
+TestResults/
+
+# IDE and OS files
+.vs/
+.idea/
+*.user
+.DS_Store
+
+# Angular / Node (web/ also has its own .gitignore)
+node_modules/
+.angular/
+dist/
