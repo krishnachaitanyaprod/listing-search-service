@@ -5,6 +5,16 @@
     <ProjectReference Include="..\ListingSearch.Infrastructure\ListingSearch.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.12" />
+  </ItemGroup>
+
+  <!-- One copy of the data in the repo: linked here, so it's copied next to the app on build and publish. -->
+  <ItemGroup>
+    <None Include="..\..\data\sample_listings.json" Link="data\sample_listings.json"
+          CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+  </ItemGroup>
+
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>

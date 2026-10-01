@@ -85,7 +85,7 @@ Each case below returns a 400 ProblemDetails response with an error on the named
 - A numeric parameter that isn't a number, for example `minPrice=abc`
 - A `city` or `keyword` longer than 100 characters
 
-All field errors come back together in one response, including an unknown `city`. There are two exceptions. A `city` that is already too long isn't looked up. A `page` past the last page is checked only when everything else is valid, because it needs the result count.
+All field errors come back together in one response, including an unknown `city`. There are three exceptions. A `city` that is already too long isn't looked up. A `page` past the last page is checked only when everything else is valid, because it needs the result count. A value that isn't a number is rejected before the search runs, so only those errors come back.
 
 **Why:** the handout asks for a clear error rather than a crash, a silent empty result, or wrong data.
 

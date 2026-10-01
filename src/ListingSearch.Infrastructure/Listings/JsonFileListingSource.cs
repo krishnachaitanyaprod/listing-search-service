@@ -7,8 +7,8 @@ namespace ListingSearch.Infrastructure.Listings;
 
 // Reads listings from a file holding a JSON array. A bad record is logged with its id and reason, then skipped;
 // a missing file or a file that isn't valid JSON fails the load with a clear message.
-// filePath is already resolved: the Api resolves a relative Listings:FilePath against AppContext.BaseDirectory
-// and uses an absolute one as it is.
+// filePath is already resolved: AddListingSearchInfrastructure resolves a relative Listings:FilePath against
+// AppContext.BaseDirectory and uses an absolute one as it is.
 public sealed class JsonFileListingSource(string filePath, ILogger<JsonFileListingSource> logger) : IListingSource
 {
     private static readonly JsonSerializerOptions JsonOptions = new()
