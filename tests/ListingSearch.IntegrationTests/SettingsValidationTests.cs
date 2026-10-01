@@ -16,6 +16,7 @@ public class SettingsValidationTests(ApiFactory factory) : IClassFixture<ApiFact
     [InlineData("Paging:DefaultPageSize", "51", "Paging:DefaultPageSize must be between 1 and Paging:MaxPageSize.")]
     [InlineData("Listings:FilePath", "", "Listings:FilePath must be set.")]
     [InlineData("Listings:FilePath", "  ", "Listings:FilePath must be set.")]
+    [InlineData("GeneratedListings:Count", "-1", "GeneratedListings:Count must be 0 or more.")]
     public void BadSetting_StopsStartup_WithItsRule(string key, string value, string message)
     {
         Assert.Contains(message, StartupError((key, value)));

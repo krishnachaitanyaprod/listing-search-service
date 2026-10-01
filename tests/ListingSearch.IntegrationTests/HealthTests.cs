@@ -22,7 +22,7 @@ public class HealthTests(ApiFactory factory) : IClassFixture<ApiFactory>
     [Fact]
     public async Task ReadyCheck_IsUnhealthyUntilTheCatalogIsLoaded()
     {
-        var loader = new ListingCatalogLoader(new EmptySource());
+        var loader = new ListingCatalogLoader([new EmptySource()]);
         var check = new ListingCatalogHealthCheck(loader);
 
         var before = await check.CheckHealthAsync(new HealthCheckContext());

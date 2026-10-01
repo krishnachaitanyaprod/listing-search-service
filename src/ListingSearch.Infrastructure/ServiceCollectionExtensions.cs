@@ -9,7 +9,8 @@ namespace ListingSearch.Infrastructure;
 
 public static class ServiceCollectionExtensions
 {
-    // The JSON listing source and the catalog it fills once at startup.
+    // The listing sources (the JSON file, plus generated listings when GeneratedListings:Count > 0)
+    // and the catalog they fill once at startup.
     public static IServiceCollection AddListingSearchInfrastructure(
         this IServiceCollection services, IConfiguration configuration)
     {
@@ -21,6 +22,17 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<IListingSource>(provider => new JsonFileListingSource(
             ResolveListingsPath(provider.GetRequiredService<IOptions<ListingsSettings>>().Value.FilePath),
             provider.GetRequiredService<ILogger<JsonFileListingSource>>()));
+
+        services.AddOptions<GeneratedListingsSettings>()
+            .Bind(configuration.GetSection(GeneratedListingsSettings.Section))
+            .Validate(s => s.Count >= 0, "GeneratedListings:Count must be 0 or more.")
+            .ValidateOnStart();
+
+        services.AddSingleton<IListingSource>(provider =>
+        {
+            var settings = provider.GetRequiredService<IOptions<GeneratedListingsSettings>>().Value;
+            return new GeneratedListingSource(settings.Count, settings.Seed, settings.AnchorDate);
+        });
 
         services.AddSingleton<ListingCatalogLoader>();
         services.AddHostedService(provider => provider.GetRequiredService<ListingCatalogLoader>());

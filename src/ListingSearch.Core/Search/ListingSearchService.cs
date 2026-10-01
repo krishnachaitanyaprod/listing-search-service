@@ -33,16 +33,19 @@ public sealed class ListingSearchService(
 
         var matches = catalog.Listings
             .Where(listing => _filters.All(filter => filter.Matches(listing, criteria)))
-            .Select(listing => listing.Listing);
-
-        // Every match is scored and ranked before paging, because page 1 depends on all of them.
-        var ranked = scorer.Score(matches, criteria).Order(RankingComparer.Instance).ToList();
+            .Select(listing => listing.Listing)
+            .ToList();
 
         var pageSize = query.PageSize ?? limits.DefaultPageSize;
-        if (!Pager.PageExists(query.Page, ranked.Count, pageSize))
+        if (!Pager.PageExists(query.Page, matches.Count, pageSize))
             return SearchOutcome.Invalid(
-                "page", $"page {query.Page} is past the last page ({Pager.TotalPages(ranked.Count, pageSize)}).");
+                "page", $"page {query.Page} is past the last page ({Pager.TotalPages(matches.Count, pageSize)}).");
 
-        return SearchOutcome.Success(Pager.Page(ranked, query.Page, pageSize));
+        // Every match is scored, because any of them could be the best. Only those up to the end of this page
+        // are put in order; the total still counts every match.
+        var needed = (int)Math.Min((long)query.Page * pageSize, matches.Count);
+        var best = TopRanked.Select(scorer.Score(matches, criteria), needed);
+
+        return SearchOutcome.Success(Pager.Page(best, query.Page, pageSize, matches.Count));
     }
 }

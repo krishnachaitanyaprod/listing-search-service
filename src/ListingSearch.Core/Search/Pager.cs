@@ -10,11 +10,12 @@ public static class Pager
     public static bool PageExists(int page, int totalCount, int pageSize) =>
         page == 1 || page <= TotalPages(totalCount, pageSize);
 
-    public static PagedResult<T> Page<T>(IReadOnlyList<T> items, int page, int pageSize) =>
+    // ranked holds the items in order at least up to the end of this page; totalCount is every match.
+    public static PagedResult<T> Page<T>(IReadOnlyList<T> ranked, int page, int pageSize, int totalCount) =>
         new(
-            items.Skip((page - 1) * pageSize).Take(pageSize).ToList(),
+            ranked.Skip((page - 1) * pageSize).Take(pageSize).ToList(),
             page,
             pageSize,
-            items.Count,
-            TotalPages(items.Count, pageSize));
+            totalCount,
+            TotalPages(totalCount, pageSize));
 }

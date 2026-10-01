@@ -30,12 +30,25 @@ public class PagerTests
     {
         var items = Enumerable.Range(1, 12).ToList();
 
-        var page = Pager.Page(items, page: 3, pageSize: 5);
+        var page = Pager.Page(items, page: 3, pageSize: 5, totalCount: 12);
 
         Assert.Equal(new[] { 11, 12 }, page.Items);
         Assert.Equal(3, page.Page);
         Assert.Equal(5, page.PageSize);
         Assert.Equal(12, page.TotalCount);
         Assert.Equal(3, page.TotalPages);
+    }
+
+    [Fact]
+    public void Page_TakesTheTotalFromTheCaller_WhenOnlyTheTopItemsAreRanked()
+    {
+        // Only the best 10 of 1,000 matches were ranked, for page 2 at 5 a page.
+        var top = Enumerable.Range(1, 10).ToList();
+
+        var page = Pager.Page(top, page: 2, pageSize: 5, totalCount: 1000);
+
+        Assert.Equal(new[] { 6, 7, 8, 9, 10 }, page.Items);
+        Assert.Equal(1000, page.TotalCount);
+        Assert.Equal(200, page.TotalPages);
     }
 }

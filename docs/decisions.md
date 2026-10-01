@@ -110,6 +110,8 @@ Equal unrounded scores are ordered by lower price first, then by key in ordinal 
 
 **Why:** the cheaper listing winning a tie makes sense to a buyer, and the key makes the order fully deterministic.
 
+Only the best page × pageSize matches are put in order, using a heap, instead of sorting every match. Every match is still scored, and `totalCount` still counts them all. Keys are unique, so no two listings tie completely, and the result is exactly the same as a full sort.
+
 ## Status
 
 All statuses are returned, and each result shows its status.
@@ -136,6 +138,9 @@ Checked at startup. Invalid values stop the app with a clear message.
 | `Paging:DefaultPageSize` | 10 | > 0 and ≤ MaxPageSize |
 | `Paging:MaxPageSize` | 50 | > 0 |
 | `Listings:FilePath` | `data/sample_listings.json` | Must be set. Relative to the app's folder, or absolute. |
+| `GeneratedListings:Count` | 0 | ≥ 0. Seeded listings (source `GEN`) searched alongside the file. |
+| `GeneratedListings:Seed` | 42 | Any number. The same seed, count and anchor date give the same listings. |
+| `GeneratedListings:AnchorDate` | 2026-09-30 | Generated listing dates count back from this fixed date. |
 
 ## Worked example
 
