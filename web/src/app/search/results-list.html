@@ -1,0 +1,37 @@
+<ol class="results">
+  @for (item of items(); track item.key) {
+    <li class="listing" [attr.data-status]="item.status">
+      <div class="heading">
+        <h3>{{ item.address }}</h3>
+        <span class="status" [attr.data-status]="item.status">{{ item.status | titlecase }}</span>
+      </div>
+
+      <p class="facts">
+        <strong>{{ item.price | currency: 'USD' : 'symbol' : '1.0-0' }}</strong>
+        <span>{{ item.city }}</span>
+        <span>{{ item.bedrooms }} {{ item.bedrooms === 1 ? 'bedroom' : 'bedrooms' }}</span>
+        <span>{{ item.bathrooms | number: '1.0-1' }} {{ item.bathrooms === 1 ? 'bathroom' : 'bathrooms' }}</span>
+        <span>{{ item.sqft | number }} sq ft</span>
+      </p>
+      <p class="meta">
+        <span>Listed {{ item.listedDate | date: 'MMM d, y' }}</span>
+        <span>{{ item.listedDate | daysAgo }}</span>
+        <span>{{ item.source }}</span>
+      </p>
+      <p class="description">{{ item.description }}</p>
+
+      <dl class="score">
+        <div class="total">
+          <dt>Score</dt>
+          <dd>{{ item.score | number: '1.1-1' }}</dd>
+        </div>
+        @for (factor of item.factors | keyvalue; track factor.key) {
+          <div>
+            <dt>{{ factorLabel(factor.key) }}</dt>
+            <dd>{{ factor.value === null ? 'not used' : (factor.value | number: '1.2-2') }}</dd>
+          </div>
+        }
+      </dl>
+    </li>
+  }
+</ol>

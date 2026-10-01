@@ -1,0 +1,106 @@
+.results {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 12px;
+}
+
+.listing {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 14px 16px;
+}
+
+.listing[data-status='pending'] {
+  box-shadow: inset 4px 0 0 var(--warning);
+}
+
+.heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+h3 {
+  margin: 0;
+  font-size: 1.05rem;
+}
+
+.status {
+  flex-shrink: 0;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--success-soft);
+  color: var(--success);
+}
+
+.status[data-status='pending'] {
+  background: var(--warning-soft);
+  color: var(--warning-text);
+}
+
+.status[data-status='sold'] {
+  background: var(--muted-soft);
+  color: var(--muted);
+}
+
+.facts,
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 4px 0 0;
+}
+
+/* A dot between items that stays with the item when the line wraps. */
+.facts > * + *::before,
+.meta > * + *::before {
+  content: '·';
+  margin: 0 7px;
+  color: var(--border-strong);
+}
+
+.meta {
+  margin-top: 2px;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.description {
+  margin: 6px 0 0;
+  color: var(--muted);
+}
+
+.score {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 20px;
+  margin: 10px 0 0;
+  padding-top: 10px;
+  border-top: 1px solid var(--border);
+  font-size: 0.85rem;
+}
+
+.score div {
+  display: flex;
+  gap: 6px;
+}
+
+.score dt {
+  color: var(--muted);
+}
+
+.score dd {
+  margin: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.score .total dd {
+  font-weight: 700;
+}

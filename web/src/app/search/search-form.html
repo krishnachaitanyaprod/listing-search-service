@@ -1,0 +1,49 @@
+<form class="search-form" [formGroup]="form" (ngSubmit)="submit()">
+  <div class="fields">
+    @for (field of textFields; track field.name) {
+      <div class="field">
+        <label [for]="field.name">{{ field.label }}</label>
+        <input
+          type="text"
+          autocomplete="off"
+          [id]="field.name"
+          [formControlName]="field.name"
+          [placeholder]="field.placeholder"
+          [attr.aria-invalid]="errorsFor(field.name).length > 0"
+          [attr.aria-describedby]="field.name + '-errors'"
+        />
+        <div [id]="field.name + '-errors'">
+          @for (message of errorsFor(field.name); track $index) {
+            <p class="field-error">{{ message }}</p>
+          }
+        </div>
+      </div>
+    }
+
+    @for (field of numberFields; track field.name) {
+      <div class="field">
+        <label [for]="field.name">{{ field.label }}</label>
+        <input
+          type="number"
+          min="0"
+          [id]="field.name"
+          [formControlName]="field.name"
+          [placeholder]="field.placeholder"
+          [step]="field.step"
+          [attr.aria-invalid]="errorsFor(field.name).length > 0"
+          [attr.aria-describedby]="field.name + '-errors'"
+        />
+        <div [id]="field.name + '-errors'">
+          @for (message of errorsFor(field.name); track $index) {
+            <p class="field-error">{{ message }}</p>
+          }
+        </div>
+      </div>
+    }
+  </div>
+
+  <div class="actions">
+    <button type="submit" class="primary">Search</button>
+    <button type="button" (click)="clear()">Clear</button>
+  </div>
+</form>

@@ -1,0 +1,31 @@
+<main class="page">
+  <h1>Listing Search</h1>
+
+  <app-search-form [fieldErrors]="fieldErrors()" (search)="search($event)" />
+
+  <section class="results" [class.busy]="loading()" aria-label="Results">
+    <p class="status" role="status">{{ statusText() }}</p>
+
+    @if (failed()) {
+      <p class="alert" role="alert">Something went wrong while searching. Please try again.</p>
+    }
+
+    @if (invalid()) {
+      <div class="alert" role="alert">
+        <p>Please correct the fields marked above.</p>
+        @for (message of otherErrors(); track $index) {
+          <p>{{ message }}</p>
+        }
+      </div>
+    }
+
+    @if (response(); as result) {
+      @if (result.totalCount === 0) {
+        <p class="empty">No listings match your search.</p>
+      } @else {
+        <app-results-list [items]="result.items" />
+        <app-pager [page]="result.page" [totalPages]="result.totalPages" (pageChange)="goToPage($event)" />
+      }
+    }
+  </section>
+</main>

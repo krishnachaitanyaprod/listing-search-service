@@ -1,0 +1,11 @@
+.pager {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+span {
+  font-variant-numeric: tabular-nums;
+}
