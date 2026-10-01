@@ -9,7 +9,10 @@ namespace ListingSearch.Infrastructure.Listings;
 // with the source's message.
 public sealed class ListingCatalogLoader(IListingSource source) : IHostedService
 {
-    private ListingCatalog? _catalog;
+    // Set once at startup and read by request threads.
+    private volatile ListingCatalog? _catalog;
+
+    public bool IsLoaded => _catalog is not null;
 
     public ListingCatalog Catalog =>
         _catalog ?? throw new InvalidOperationException("The listings have not been loaded yet.");

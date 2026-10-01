@@ -3,6 +3,7 @@ using ListingSearch.Infrastructure.Listings;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace ListingSearch.Infrastructure;
 
@@ -12,8 +13,13 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddListingSearchInfrastructure(
         this IServiceCollection services, IConfiguration configuration)
     {
+        services.AddOptions<ListingsSettings>()
+            .Bind(configuration.GetSection(ListingsSettings.Section))
+            .Validate(s => !string.IsNullOrWhiteSpace(s.FilePath), "Listings:FilePath must be set.")
+            .ValidateOnStart();
+
         services.AddSingleton<IListingSource>(provider => new JsonFileListingSource(
-            ResolveListingsPath(configuration["Listings:FilePath"]),
+            ResolveListingsPath(provider.GetRequiredService<IOptions<ListingsSettings>>().Value.FilePath),
             provider.GetRequiredService<ILogger<JsonFileListingSource>>()));
 
         services.AddSingleton<ListingCatalogLoader>();
@@ -25,8 +31,6 @@ public static class ServiceCollectionExtensions
 
     // A relative path is resolved against the app's own folder, so it works from any working folder,
     // in tests and when published. An absolute path is used as it is.
-    private static string ResolveListingsPath(string? configuredPath) =>
-        string.IsNullOrWhiteSpace(configuredPath)
-            ? throw new InvalidOperationException("The Listings:FilePath setting is missing.")
-            : Path.GetFullPath(configuredPath, AppContext.BaseDirectory);
+    private static string ResolveListingsPath(string configuredPath) =>
+        Path.GetFullPath(configuredPath, AppContext.BaseDirectory);
 }

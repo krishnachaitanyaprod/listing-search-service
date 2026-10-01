@@ -135,6 +135,7 @@ Checked at startup. Invalid values stop the app with a clear message.
 | `Scoring:RecencyHalfLifeDays` | 30 | > 0 |
 | `Paging:DefaultPageSize` | 10 | > 0 and ≤ MaxPageSize |
 | `Paging:MaxPageSize` | 50 | > 0 |
+| `Listings:FilePath` | `data/sample_listings.json` | Must be set. Relative to the app's folder, or absolute. |
 
 ## Worked example
 
