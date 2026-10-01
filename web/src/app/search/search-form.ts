@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject, input, output } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NonNullableFormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { FieldErrors, ListingSearchCriteria } from './listing-search.models';
 
@@ -29,8 +30,11 @@ export class SearchForm {
     minPrice: null as number | null,
     maxPrice: null as number | null,
     minBedrooms: null as number | null,
-    targetBudget: null as number | null
+    targetBudget: null as number | null,
+    pageSize: 10
   });
+
+  protected readonly pageSizes = [5, 10, 20, 50];
 
   protected readonly textFields: Field[] = [
     { name: 'city', label: 'City', placeholder: 'Any city' },
@@ -44,6 +48,11 @@ export class SearchForm {
     { name: 'targetBudget', label: 'Target budget', placeholder: 'None', step: 1000 }
   ];
 
+  constructor() {
+    // A new page size searches again straight away, from page 1.
+    this.form.controls.pageSize.valueChanges.pipe(takeUntilDestroyed()).subscribe(() => this.submit());
+  }
+
   protected errorsFor(field: string): string[] {
     return this.fieldErrors()[field] ?? [];
   }
@@ -53,7 +62,8 @@ export class SearchForm {
   }
 
   protected clear(): void {
-    this.form.reset();
+    // Without emitting, so resetting the page size doesn't search a second time.
+    this.form.reset(undefined, { emitEvent: false });
     this.submit();
   }
 }

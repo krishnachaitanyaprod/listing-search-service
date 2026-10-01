@@ -38,6 +38,8 @@ export interface ListingSearchCriteria {
   maxPrice?: number | null;
   minBedrooms?: number | null;
   targetBudget?: number | null;
+  // Not a filter, but sent the same way; null means the API's default.
+  pageSize?: number | null;
 }
 
 // Messages keyed by query parameter name, from a 400 ValidationProblem.

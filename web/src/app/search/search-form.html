@@ -45,5 +45,14 @@
   <div class="actions">
     <button type="submit" class="primary">Search</button>
     <button type="button" (click)="clear()">Clear</button>
+
+    <div class="page-size">
+      <label for="pageSize">Results per page</label>
+      <select id="pageSize" formControlName="pageSize">
+        @for (size of pageSizes; track size) {
+          <option [ngValue]="size">{{ size }}</option>
+        }
+      </select>
+    </div>
   </div>
 </form>
